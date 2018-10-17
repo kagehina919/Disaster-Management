@@ -2,6 +2,64 @@ import React, { Component } from 'react';
 import { Jumbotron, Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeRegion = this.onChangeRegion.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+
+    this.state = {
+        form_data: {}
+    }
+  }
+
+  onChangeEmail(e){
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "email": e.target.value
+      }
+    })
+  }
+
+  onChangePassword(e){
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "password": e.target.value
+      }
+    })
+  }
+
+  onChangeUsername(e){
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "username": e.target.value
+      }
+    })
+  } 
+
+  onChangeRegion(e){
+    console.log(e);
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "region": e.target.value
+      }
+    })
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    alert(`name is ${this.state.form_data.email} and port is ${this.state.form_data.region}`);
+    this.setState({
+      form_data: {}
+    })
+}
+
   render() {
     return (
     <div class="row">
@@ -14,19 +72,22 @@ class Register extends Component {
       </Breadcrumb>
     </h3>
     <Jumbotron>
-      <Form>
+      <Form onSubmit={this.onSubmit}> 
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-          <Input type="email" name="email" id="exampleEmail" placeholder="Enter Email" />
+          <Input type="email" name="email" id="email" placeholder="Enter Email" onChange={this.onChangeEmail} value={this.state.form_data.email}/>
         </FormGroup>
+        {''}<br/>
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-          <Input type="password" name="password" id="examplePassword" placeholder="Enter password" />
+          <Input type="password" name="password" id="password" placeholder="Enter password" onChange={this.onChangePassword} value={this.state.form_data.password}/>
         </FormGroup>
+        {''}<br/>
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-          <Input type="username" name="username" id="exampleUsername" placeholder="Enter username" />
+          <Input type="username" name="username" id="username" placeholder="Enter username" onChange={this.onChangeUsername} value={this.state.form_data.username}/>
         </FormGroup>
+        {''}<br/>
         <FormGroup>
-          <Label for="exampleSelect">Select Region</Label>
-          <Input type="select" name="select" id="exampleSelect">
+          <Label for="exampleSelect">Select Regions</Label>
+          <Input type="select" name="selectMulti" id="select" onChange={this.onChangeRegion} multiple>
             <option>Central</option>
             <option>East</option>
             <option>North</option>
