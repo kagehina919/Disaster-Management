@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Jumbotron, Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 class Register extends Component {
   constructor(props) {
@@ -54,10 +55,14 @@ class Register extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    alert(`name is ${this.state.form_data.email} and port is ${this.state.form_data.region}`);
+    fetch('http://0.0.0.0:5000/register', {
+      method: 'post',
+      body: JSON.stringify(this.state.form_data)
+    });
     this.setState({
       form_data: {}
-    })
+    });
+    return <Redirect to='/' />  
 }
 
   render() {

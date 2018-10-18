@@ -1,7 +1,50 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    
+    this.state = {
+        form_data: {}
+    }
+  }
+
+  onChangePassword(e){
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "password": e.target.value
+      }
+    })
+  }
+
+  onChangeUsername(e){
+    this.setState({
+        form_data : {
+          ...this.state.form_data,
+        "username": e.target.value
+      }
+    })
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    fetch('http://0.0.0.0:5000/login', {
+      method: 'post',
+      body: JSON.stringify(this.state.form_data)
+    });
+    this.setState({
+      form_data: {}
+    });
+    return <Redirect to='/register' />
+  } 
+
+
   render() {
     return (
       <div class="row">
@@ -13,12 +56,12 @@ class Login extends Component {
               <BreadcrumbItem active>Login</BreadcrumbItem>
             </Breadcrumb>
           </h3>
-          <Form inline>
+          <Form inline onSubmit={this.onSubmit}>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <Input type="email" name="email" id="exampleEmail" placeholder="Username" />
+              <Input type="username" name="username" id="exampleEmail" placeholder="Username" onChange={this.onChangeUsername} value={this.state.form_data.username} />
             </FormGroup>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-              <Input type="password" name="password" id="examplePassword" placeholder="Password" />
+              <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.onChangePassword} value={this.state.form_data.password} />
             </FormGroup>
             <Button color="success">Login</Button>
           </Form>
