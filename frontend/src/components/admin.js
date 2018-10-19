@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Jumbotron, Container } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 class admin extends Component {
     render() {

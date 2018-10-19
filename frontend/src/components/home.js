@@ -16,7 +16,7 @@ class Home extends Component {
           <p>The site notifies you of an impending disaster, in the regions you choose to be notified at.</p>
           <Button outline color="primary" href="/register" >Sign Up</Button>{' '}
           <Button outline color="success" href="/login" >Login</Button>{' '}
-          <Button outline color="info">Admin</Button>{' '}
+          <Button outline color="info" href="/admin">Admin</Button>{' '}
         </Container>
         </Jumbotron>
     </div>
