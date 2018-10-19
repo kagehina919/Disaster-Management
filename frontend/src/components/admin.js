@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Jumbotron, Container } from 'reactstrap';
+import { Jumbotron, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Button } from 'reactstrap';
 
 class admin extends Component {
@@ -8,10 +8,15 @@ class admin extends Component {
             <div class="row">
             <div class="col"></div>
             <div class="col-6">
-                <Jumbotron >
-                <Container >
+                <h3>
+                    <Breadcrumb>
+                        <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                        <BreadcrumbItem active>Admin</BreadcrumbItem>
+                    </Breadcrumb>
+                </h3>
+                <Jumbotron>
+                <Container>
                 <h1>Disaster Notifier</h1>
-                <h3>Admin</h3>
                 <p>Welcome !!</p>
                 <Button outline color="primary" >Send Mail</Button>{' '}
                 <Button outline color="success" >Weather News</Button>{' '}

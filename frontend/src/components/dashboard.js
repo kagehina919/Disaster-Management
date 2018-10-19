@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Jumbotron, Container } from 'reactstrap';
+import { Jumbotron, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 class dashboard extends Component {
     render() {
@@ -7,10 +7,15 @@ class dashboard extends Component {
             <div class="row">
             <div class="col"></div>
             <div class="col-6">
-                <Jumbotron >
-                <Container >
+                <h3>
+                    <Breadcrumb>
+                        <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                        <BreadcrumbItem active>Dashboard</BreadcrumbItem>
+                    </Breadcrumb>
+                </h3>
+                <Jumbotron>
+                <Container>
                 <h1>Disaster Notifier</h1>
-                <h3>Dashboard</h3>
                 <p>Welcome !!</p>
                 <p>You have subscribed to the following regions</p>
                 </Container>
