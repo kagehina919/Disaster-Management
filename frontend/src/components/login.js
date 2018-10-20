@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +53,6 @@ class Login extends Component {
     this.setState({
       form_data: {}
     });
-    return <Redirect to='/register' />
   } 
 
 
@@ -74,10 +74,7 @@ class Login extends Component {
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.onChangePassword} value={this.state.form_data.password} />
             </FormGroup>
-            <div>
-              {this.renderRedirect()}
-              <Button color="primary" onClick={this.setRedirect} >Submit</Button>
-            </div>
+            <Button color="success" onClick={this.setRedirect} >Log in</Button>
           </Form>
         </div>
         <div class="col"></div>
