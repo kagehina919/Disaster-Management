@@ -12,7 +12,18 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-        form_data: {}
+        form_data: {},
+        redirect: false
+    }
+  }
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/dashboard' />
     }
   }
 
@@ -62,7 +73,6 @@ class Register extends Component {
     this.setState({
       form_data: {}
     });
-    return <Redirect to='/' />  
 }
 
   render() {
@@ -100,7 +110,10 @@ class Register extends Component {
             <option>West</option>
           </Input>
         </FormGroup>
-        <Button color="primary" >Submit</Button>
+        <div>
+          {this.renderRedirect()}
+          <Button color="primary" onClick={this.setRedirect} >Submit</Button>
+        </div>
       </Form> 
     </Jumbotron>
     </div>

@@ -19,7 +19,7 @@ class admin extends Component {
                 <h1>Disaster Notifier</h1>
                 <p>Welcome !!</p>
                 <Button outline color="primary" >Send Mail</Button>{' '}
-                <Button outline color="success" >Weather News</Button>{' '}
+                <Button outline color="success" href="http://www.imd.gov.in/Welcome%20To%20IMD/Welcome.php" >Weather News</Button>{' '}
                 </Container>
                 </Jumbotron>
             </div>

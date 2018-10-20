@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Jumbotron, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Jumbotron, Container, Breadcrumb, BreadcrumbItem, Button } from 'reactstrap';
 
 class dashboard extends Component {
     render() {
@@ -18,6 +18,8 @@ class dashboard extends Component {
                 <h1>Disaster Notifier</h1>
                 <p>Welcome !!</p>
                 <p>You have subscribed to the following regions</p>
+                <p>For Weather news, Click the following button !!</p>
+                <Button outline color="success" href="http://www.imd.gov.in/Welcome%20To%20IMD/Welcome.php" >Weather News</Button>{' '}
                 </Container>
                 </Jumbotron>
             </div>

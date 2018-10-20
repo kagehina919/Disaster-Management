@@ -10,7 +10,18 @@ class Login extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     
     this.state = {
-        form_data: {}
+        form_data: {},
+        redirect: false
+    }
+  }
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/dashboard' />
     }
   }
 
@@ -63,7 +74,10 @@ class Login extends Component {
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.onChangePassword} value={this.state.form_data.password} />
             </FormGroup>
-            <Button color="success">Login</Button>
+            <div>
+              {this.renderRedirect()}
+              <Button color="primary" onClick={this.setRedirect} >Submit</Button>
+            </div>
           </Form>
         </div>
         <div class="col"></div>
