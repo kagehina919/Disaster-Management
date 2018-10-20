@@ -15,11 +15,13 @@ class Login extends Component {
         redirect: false
     }
   }
+
   setRedirect = () => {
     this.setState({
       redirect: true
     })
   }
+  
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to='/dashboard' />
@@ -53,6 +55,7 @@ class Login extends Component {
     this.setState({
       form_data: {}
     });
+    this.setRedirect();
   } 
 
 
@@ -74,7 +77,10 @@ class Login extends Component {
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.onChangePassword} value={this.state.form_data.password} />
             </FormGroup>
-            <Button color="success" onClick={this.setRedirect} >Log in</Button>
+            <div>
+              {this.renderRedirect()}
+              <Button color="success" >Log in</Button>
+            </div>
           </Form>
         </div>
         <div class="col"></div>

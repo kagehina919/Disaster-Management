@@ -24,6 +24,16 @@ class admin extends Component {
                         <Label for="exampleText">Please write the required E-mail here :</Label>
                         <Input type="textarea" name="text" id="exampleText" />
                     </FormGroup>
+                    <FormGroup>
+                        <Label for="exampleSelect">Select Region</Label>
+                        <Input type="select" name="select" id="exampleSelect">
+                        <option>Central</option>
+                        <option>East</option>
+                        <option>North</option>
+                        <option>South</option>
+                        <option>West</option>
+                        </Input>
+                    </FormGroup>
                     <Button outline color="primary" >Send Mail</Button>{' '}
                 </Form>
                 </Container>
