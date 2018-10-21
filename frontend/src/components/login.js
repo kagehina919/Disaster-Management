@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Alert, Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
-
 
 class Login extends Component {
   constructor(props) {
@@ -12,19 +11,19 @@ class Login extends Component {
     
     this.state = {
         form_data: {},
-        redirect: false
+        redirect_dashboard: false
     }
   }
-
-  setRedirect = () => {
+  
+  setRedirectDashboard = () => {
     this.setState({
-      redirect: true
+      redirect_dashboard: true,
     })
   }
-  
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to='/dashboard' />
+
+  renderRedirectDashboard = () => {
+    if (this.state.redirect_dashboard) {
+      return <Redirect to='/dashboard' />;
     }
   }
 
@@ -46,16 +45,30 @@ class Login extends Component {
     })
   }
 
+  renderAlert(){
+    if (this.state.alert)
+      return <Alert color="danger">{this.state.alert_message}</Alert>
+  }
+
   onSubmit(e) {
     e.preventDefault();
+    const self = this;
     fetch('http://0.0.0.0:5000/login', {
       method: 'post',
       body: JSON.stringify(this.state.form_data)
+    }).then(function(response) {
+      return response.json();
+    }).then(function(post_response){
+      if(post_response.type == 'success'){
+        self.setRedirectDashboard();
+      }
+      else if(post_response.type == 'failure'){
+        self.setState({
+          alert: true,
+          alert_message: post_response.message
+        })
+      }
     });
-    this.setState({
-      form_data: {}
-    });
-    this.setRedirect();
   } 
 
 
@@ -70,6 +83,7 @@ class Login extends Component {
               <BreadcrumbItem active>Login</BreadcrumbItem>
             </Breadcrumb>
           </h3>
+          {this.renderAlert()}
           <Form inline onSubmit={this.onSubmit}>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
               <Input type="username" name="username" id="exampleEmail" placeholder="Username" onChange={this.onChangeUsername} value={this.state.form_data.username} />
@@ -78,7 +92,7 @@ class Login extends Component {
               <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.onChangePassword} value={this.state.form_data.password} />
             </FormGroup>
             <div>
-              {this.renderRedirect()}
+              {this.renderRedirectDashboard()}
               <Button color="success" >Log in</Button>
             </div>
           </Form>

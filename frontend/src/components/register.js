@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Jumbotron, Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
+import fetch_post from '../utils/request_handler';
 
 class Register extends Component {
   constructor(props) {
@@ -71,7 +72,12 @@ class Register extends Component {
     fetch('http://0.0.0.0:5000/register', {
       method: 'post',
       body: JSON.stringify(this.state.form_data)
-    }); 
+    }).then(function(response) {
+      console.log()
+      return response.json();
+    }).then(function(m){
+        console.log(m)
+    });
     this.setState({
       form_data: {}
     });

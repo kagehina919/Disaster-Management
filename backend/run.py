@@ -1,9 +1,15 @@
-from flask import Flask, redirect, url_for, request, session
-from db_connect import  connection
+from flask import Flask, redirect, url_for, request, session, jsonify
+from db_connect import connection
 import os, json
 
 app = Flask(__name__)
 default = "true"
+
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
 
 @app.route('/')
 def home():
@@ -39,18 +45,21 @@ def register():
 def login():
     data = json.loads(request.data.decode('utf-8'))
     if request.method == 'POST':
-        username_form = data["username"]
-        password_form = data["password"]
+        username_form = data['username']
+        password_form = data['password']
         c, conn = connection()
         c.execute("SELECT password FROM users WHERE username = ('%s')" % username_form)
         passw = c.fetchone()
-        print(passw[0])
-        print(password_form)
-        if password_form == passw[0]:
+        if passw is None:
+            response = {'type':'failure', 'message': 'Username not found.'}
+        elif password_form == passw[0]:
             session['logged_in'] = True
             session['username'] = data['username']
-            return ('logged in as ' + session['username'])
-        return "False"
+            response = {'type': 'success', 'message': 'Logged in as ' + session['username']}
+        else:
+            response = {'type':'failure', 'message': 'Wrong Credentials!'}
+        return jsonify(response), 200
+    return None
 
 
 if __name__ == "__main__":
