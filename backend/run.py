@@ -1,9 +1,22 @@
 from flask import Flask, redirect, url_for, request, session, jsonify
 from db_connect import connection
-import os, json
+import json, os
+from flask_sendgrid import SendGrid
+
 
 app = Flask(__name__)
 default = "true"
+app.config['SENDGRID_API_KEY'] = 'your api key'
+app.config['SENDGRID_DEFAULT_FROM'] = 'admin@yourdomain.com'
+mail = SendGrid(app)
+
+# send multiple recipients; list of emails as sendgrid.mail.helpers.Email object
+mail.send_email(
+    from_email='someone@yourdomain.com',
+    to_email=[Email('test1@example.com'), Email('test2@example.com')],
+    subject='Subject',
+    text='Body',
+)
 
 @app.after_request
 def after_request(response):
@@ -60,6 +73,31 @@ def login():
             response = {'type':'failure', 'message': 'Wrong Credentials!'}
         return jsonify(response), 200
     return None
+
+@app.route('/admin', methods=['POST'])
+def admin():
+    data = json.loads(request.data.decode('utf-8'))
+    if request.method == 'POST':
+        text_form= data['text']
+        region_form= data['region']
+        c, conn = connection()
+        if region_form == 'Central':
+            reg=c.execute("SELECT email FROM users WHERE region_central = 1" )
+            return reg
+        elif  region_form == 'East':
+            reg = c.execute("SELECT email FROM users WHERE region_east = 1")
+            return reg
+        elif  region_form == 'North':
+            reg = c.execute("SELECT email FROM users WHERE region_north = 1")
+            return reg
+        elif  region_form == 'South':
+            reg = c.execute("SELECT email FROM users WHERE region_south = 1")
+            return reg
+        elif region_form == 'West':
+            reg = c.execute("SELECT email FROM users WHERE region_west = 1")
+            return reg
+        else:
+            print('choose region')
 
 
 if __name__ == "__main__":
