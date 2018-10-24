@@ -1,22 +1,16 @@
-from flask import Flask, redirect, url_for, request, session, jsonify
+from flask import Flask, request, session, jsonify
 from db_connect import connection
 import json, os
-from flask_sendgrid import SendGrid
+import sendgrid
+from sendgrid.helpers.mail import *
 
 
 app = Flask(__name__)
 default = "true"
-app.config['SENDGRID_API_KEY'] = 'your api key'
-app.config['SENDGRID_DEFAULT_FROM'] = 'admin@yourdomain.com'
-mail = SendGrid(app)
 
-# send multiple recipients; list of emails as sendgrid.mail.helpers.Email object
-mail.send_email(
-    from_email='someone@yourdomain.com',
-    to_email=[Email('test1@example.com'), Email('test2@example.com')],
-    subject='Subject',
-    text='Body',
-)
+@app.route('/')
+def home():
+    return 'server running'
 
 @app.after_request
 def after_request(response):
@@ -24,14 +18,10 @@ def after_request(response):
     header['Access-Control-Allow-Origin'] = '*'
     return response
 
-@app.route('/')
-def home():
-    return 'server running'
-
 @app.route('/register', methods= ['POST'])
 def register():
     data = json.loads(request.data.decode('utf-8'))
-    if request.method=='POST':
+    if request.method == 'POST':
         email = data["email"]
         username = data["username"]
         password = data["password"]
@@ -50,7 +40,6 @@ def register():
         user = "INSERT INTO users (email, username, password, region_central, region_east, region_north, region_south, region_west) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
                (email, username, password, region_central, region_east, region_north, region_south, region_west)
         c.execute(user)
-        print(user)
         conn.commit()
         return "True"
 
@@ -77,28 +66,49 @@ def login():
 @app.route('/admin', methods=['POST'])
 def admin():
     data = json.loads(request.data.decode('utf-8'))
+    print(data)
     if request.method == 'POST':
-        text_form= data['text']
-        region_form= data['region']
+        subject_ = data['subject']
+        text_ = data['text']
+        region = data['region']
         c, conn = connection()
-        if region_form == 'Central':
-            reg=c.execute("SELECT email FROM users WHERE region_central = 1" )
-            return reg
-        elif  region_form == 'East':
-            reg = c.execute("SELECT email FROM users WHERE region_east = 1")
-            return reg
-        elif  region_form == 'North':
-            reg = c.execute("SELECT email FROM users WHERE region_north = 1")
-            return reg
-        elif  region_form == 'South':
-            reg = c.execute("SELECT email FROM users WHERE region_south = 1")
-            return reg
-        elif region_form == 'West':
-            reg = c.execute("SELECT email FROM users WHERE region_west = 1")
-            return reg
+        if region == 'Central':
+            c.execute("SELECT email FROM users WHERE region_central = 1")
+            reg=list(c.fetchall())
+        elif region == 'East':
+            c.execute("SELECT email FROM users WHERE region_east = 1")
+            reg=list(c.fetchall())
+        elif region == 'North':
+            c.execute("SELECT email FROM users WHERE region_north = 1")
+            reg=list(c.fetchall())
+        elif region == 'South':
+            c.execute("SELECT email FROM users WHERE region_south = 1")
+            reg=list(c.fetchall())
+        elif region == 'West':
+            c.execute("SELECT email FROM users WHERE region_west = 1")
+            reg=list(c.fetchall())
         else:
-            print('choose region')
+            return None
+        l = []
+        for i in reg:
+            l.append(Email(i[0]))
+        print(l)
+        print(subject_, text_, reg)
 
+        sg = sendgrid.SendGridAPIClient(apikey='')
+        for i in l:
+            from_email = Email("f20160875@hyderabad.bits-pilani.ac.in")
+            to_email = i
+            subject = subject_
+            content = Content("text/plain", text_)
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+
+
+    return "True"
 
 if __name__ == "__main__":
     app.secret_key = 'super secret key'

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Jumbotron, Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
-import fetch_post from '../utils/request_handler';
 
 class Register extends Component {
   constructor(props) {
@@ -111,7 +110,7 @@ class Register extends Component {
         {''}<br/>
         <FormGroup>
           <Label for="exampleSelect">Select Regions</Label>
-          <Input type="select" name="selectMulti" id="select" onChange={this.onChangeRegion} multiple>
+          <Input type="select" name="selectMulti" id="select" onChange={this.onChangeRegion} >
             <option>Central</option>
             <option>East</option>
             <option>North</option>
