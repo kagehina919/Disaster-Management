@@ -11,7 +11,8 @@ class admin extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         
         this.state = {
-            form_data: {}
+            form_data: {},
+            alert: false
         }
       }
     
@@ -45,11 +46,16 @@ class admin extends Component {
 
       renderAlert(){
         if (this.state.alert)
-          return <Alert color="danger">{this.state.alert_message}</Alert>
+          return <Alert color="success">{this.state.alert_message}</Alert>
       }
     
       onSubmit(e){
         e.preventDefault();
+        this.setState({
+            alert: true,
+            alert_message: "Sending mails.."
+          })
+        const self = this;
         console.log(JSON.stringify(this.state.form_data))
         fetch('http://0.0.0.0:5000/admin', {
           method: 'post',
@@ -57,8 +63,14 @@ class admin extends Component {
         }).then(function(response) {
             console.log()
             return response.json();
-        }).then(function(m){
-            console.log(m)
+        }).then(function(post_response){
+            if(post_response.type == 'success'){
+                self.setState({
+                    alert: true,
+                    alert_message: post_response.message,
+                    form_data: {}
+                  })
+                }
         });
     }
 
@@ -78,6 +90,7 @@ class admin extends Component {
                 <Container>
                 <h1>Disaster Notifier</h1>
                 <p>Welcome !!</p>
+                {this.renderAlert()}
                 <Button outline color="success" href="http://www.imd.gov.in/Welcome%20To%20IMD/Welcome.php" >Weather News</Button>{' '}
                 <Form onSubmit={this.onSubmit}>
                 <FormGroup>

@@ -106,6 +106,8 @@ def admin():
             print(response.status_code)
             print(response.body)
             print(response.headers)
+            response_ = {'type': 'success', 'message': 'Mails sent successfully.'}
+            return jsonify(response_), 200
 
 
     return "True"
